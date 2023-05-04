@@ -1,0 +1,78 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="container-fluid">
+
+  <!-- Page Heading -->
+  <h1 class="h3 mb-2 text-gray-800">Alumnos</h1>
+
+  <!-- DataTales Example -->
+  <div class="card shadow mb-4">
+    <div class="card-header py-3">
+      <h6 class="m-0 font-weight-bold text-primary">Listado</h6>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          <thead>
+            <tr>
+              <th>Id</th>
+              <th>Nombre</th>
+              <th>Email</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- LISTADO DE ALUMNOS -->
+            {% for alumno in alumnos %}
+            <tr>
+              <td>{{alumno.alumno_id}}</td>
+              <td>{{alumno.alumno_nombre}}</td>
+              <td>{{alumno.alumno_email}}</td>             
+              <td>
+                
+                <form method="post" id="eliminarAlumnoForm{{alumno.alumno_id}}">
+                  {% csrf_token %}
+                  <input type="hidden" name="eliminar" value="{{alumno.alumno_id}}">
+                  <button type="button" class="btn btn-danger" data-toggle="modal"
+                    data-target="#confirmModal{{alumno.alumno_id}}">
+                    Eliminar
+                  </button>
+                </form>
+
+                <!-- Modal de confirmación -->
+                <div class="modal fade" id="confirmModal{{alumno.alumno_id}}" tabindex="-1" role="dialog"
+                  aria-labelledby="confirmModalLabel" aria-hidden="true">
+                  <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                      <div class="modal-header">
+                        <h5 class="modal-title" id="confirmModalLabel">Eliminar usuario</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                          <span aria-hidden="true">&times;</span>
+                        </button>
+                      </div>
+                      <div class="modal-body">
+                        ¿Está seguro de que desea eliminar de forma permanente al estudiante {{alumno.alumno_nombre}}?
+                      </div>
+                      <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-danger"
+                          form="eliminarAlumnoForm{{alumno.alumno_id}}">Sí</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>
+            {% endfor %}
+            <!----------------------------->
+          </tbody>
+        </table>
+      </div>
+      <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#nuevoAlumno">
+        Nuevo Alumno
+      </button>      
+    </div>
+  </div>
+
+</div>
+{% endblock %}
